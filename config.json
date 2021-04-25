@@ -1,0 +1,12 @@
+﻿{
+  "secret": "zhohal-super-secret-key",
+  "cookie": {
+    "key": "zhohal-secret-key-cookies"
+  },
+  "db": {
+    "host": "localhost",
+    "name": "zhohal_db",
+    "user": "root",
+    "pass": "12345"
+  }
+}

@@ -1,0 +1,1 @@
+exports.callBack = (data, err) => { return data ? { status: 200, data } : { status: 400, err } };
