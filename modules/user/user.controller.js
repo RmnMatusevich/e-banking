@@ -5,7 +5,8 @@ class UserController extends CrudController {
     super(usersService);
     this.token = this.token.bind(this);
     this.changePassword = this.changePassword.bind(this);
-
+    this.delete = this.delete.bind(this);
+    this.getAll = this.getAll.bind(this);
     this.routes["/token"] = [
       {
         method: "get",
@@ -13,6 +14,14 @@ class UserController extends CrudController {
       },
     ];
     this.routes["/"] = [
+      {
+        method: "get",
+        cb: this.getAll,
+      },
+      {
+        method: "delete",
+        cb: this.delete,
+      },
       {
         method: "patch",
         cb: this.update,
@@ -26,6 +35,14 @@ class UserController extends CrudController {
     ];
 
     this.registerRoutes();
+  }
+
+  async delete(req, res) {
+    return res.json(await this.service.delete(req.query.id, req))
+  }
+
+  async getAll(req, res) {
+    return res.json(await this.service.getAll(req))
   }
 
   async update(req, res) {

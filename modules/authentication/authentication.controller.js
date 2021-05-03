@@ -4,6 +4,7 @@ class AuthController extends CrudController {
   constructor(authenticationService, config) {
     super(authenticationService);
     this.loginUser = this.loginUser.bind(this);
+    this.loginAdmin = this.loginAdmin.bind(this);
     this.registerUser = this.registerUser.bind(this);
     this.logout = this.logout.bind(this);
     this.getUser = this.getUser.bind(this);
@@ -13,6 +14,12 @@ class AuthController extends CrudController {
         {
           method: "post",
           cb: this.loginUser,
+        },
+      ],
+      "/admin/login": [
+        {
+          method: "post",
+          cb: this.loginAdmin,
         },
       ],
       "/user/register": [
@@ -45,6 +52,19 @@ class AuthController extends CrudController {
       token,
     });
   }
+
+  async loginAdmin(req, res) {    
+    const data = await this.service.loginAdmin(req.body);
+    console.log("DATA ADMIN", data.admin);
+    
+    let token = await this.getToken({ ...data.admin, admin: true});
+    delete data.admin.password;
+    res.json({
+      ...data.admin,
+      token,
+    });
+  }
+
   async registerUser(req, res) {
     const data = await this.service.registerUser(req.body);
     let token = await this.getToken(data.user);
@@ -66,7 +86,8 @@ class AuthController extends CrudController {
     return jwt.sign(
       {
         id: user.id,
-        email: user.email,
+        email: user.email || user.login,
+        admin: user.admin || false
       },
       this.config.cookie.key,
       {

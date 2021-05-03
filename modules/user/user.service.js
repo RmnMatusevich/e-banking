@@ -8,6 +8,28 @@ class UserService extends CrudService {
     this.config = config;
   }
 
+  async getAll(req) {
+    if (req.user.admin) {
+      const users = await this.usersRepository.findAll()
+      console.log("users ", users);
+      return users
+    }
+    return this.errors.youNeedToBeAdminToPerformThisAction
+  }
+
+  async delete(id, req) {
+    if (req.user.admin) {
+      const destroy = await this.usersRepository.destroy({
+        where: { id: id },
+      });
+      if (destroy === 0) {
+        return this.errors.userDoesNotExist
+      }
+      return { success: true }
+    }
+    return this.errors.youNeedToBeAdminToPerformThisAction
+  }
+
   async update(id, data) {
     const user = await this.usersRepository.findByPk(id);
     delete user.dataValues.password;

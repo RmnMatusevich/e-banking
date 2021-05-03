@@ -20,6 +20,7 @@ module.exports = (db, config) => {
   const userService = new UserService(db.User, config, errors);
   const authenticationService = new AuthenticationService(
     db.User,
+    db.Admin,
     jwt,
     hash,
     config,

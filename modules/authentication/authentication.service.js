@@ -1,6 +1,7 @@
 class AuthenticationService {
-  constructor(userRepository, jwt, hash, config, errors) {
+  constructor(userRepository, adminRepository, jwt, hash, config, errors) {
     this.userRepository = userRepository;
+    this.adminRepository = adminRepository;
     this.jwt = jwt;
     this.hash = hash;
     this.config = config;
@@ -29,6 +30,22 @@ class AuthenticationService {
     };
   }
 
+  async loginAdmin(data) {
+    console.log(this.hash.get(data.password));
+
+    const admin = await this.adminRepository.findOne({
+      where: {
+        login: data.email,
+      },
+    });
+    if (data.password !== admin.dataValues.password) {
+      throw this.errors.wrongCredentials;
+    }
+    return {
+      admin: admin.dataValues,
+    };
+  }
+
   async registerUser(data) {
     const potentialUser = await this.userRepository.findOne({
       where: {
@@ -49,6 +66,22 @@ class AuthenticationService {
       city: data.city,
       address: data.address,
       postalCode: data.postalCode,
+      middleName: data.middleName,
+      birthDate: data.birthDate,
+      passportSeries: data.passportSeries,
+      passportNumber: data.passportNumber,
+      passportIssued: data.passportIssued,
+      passportIdentity: data.passportIdentity,
+      passportDate: data.passportDate,
+      phoneHome: data.phoneHome,
+      jobPlace: data.jobPlace,
+      jobPosition: data.jobPosition,
+      placeOfResidence: data.placeOfResidence,
+      maritalStatus: data.maritalStatus,
+      citizenship: data.citizenship,
+      disability: data.disability,
+      pensioner: data.pensioner,
+      monthlyIncome: data.monthlyIncome,
     };
     const user = await this.userRepository.create(bodyUser);
     return {

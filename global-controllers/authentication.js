@@ -8,6 +8,8 @@ module.exports = (jwt, wrap, config, errors) =>
         if (err) {
           res.status(errors.forbidden.status).send(errors.forbidden);
         } else {
+          console.log('REEEEQ ', decoded);
+          
           req.user = decoded;
           next();
         }

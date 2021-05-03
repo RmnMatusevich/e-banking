@@ -108,4 +108,14 @@ module.exports = {
     code: "invalid_creditId",
     status: 400,
   },
+  userDoesNotExist: {
+    message: "User does not exist",
+    code: "user_not_exist",
+    status: 404,
+  },
+  youNeedToBeAdminToPerformThisAction: {
+    message: "You are need to be an admin, to perform this action",
+    code: "not_admin",
+    status: 403,
+  }
 };
